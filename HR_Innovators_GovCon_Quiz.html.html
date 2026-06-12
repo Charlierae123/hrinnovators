@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Contract Readiness Assessment HR Innovators</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark:#1A1A1A; --charcoal:#2A2A2A; --c:#3A3A3A; --gold:#B8A98A;
+    --gold-l:#D4C9B0; --ww:#FAFAF8; --wb:#F0EDE8; --mg:#8A8A8A; --al:#D4CEC6;
+    --low:#4A7C59; --medium:#B8960A; --high:#C0602A; --critical:#B85450;
+    --navy:#1B2A4A; --navy-l:#2A3D5C;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Jost',sans-serif;background:var(--dark);color:var(--ww);min-height:100vh;overflow-x:hidden;}
+
+  /* BG */
+  .bg-texture{position:fixed;inset:0;background:
+    radial-gradient(ellipse at 15% 25%,rgba(184,169,138,0.07) 0%,transparent 55%),
+    radial-gradient(ellipse at 85% 75%,rgba(26,26,26,0.8) 0%,transparent 60%);
+    pointer-events:none;z-index:0;}
+  .bg-watermark{position:fixed;bottom:-60px;right:-40px;
+    font-family:'Cormorant Garamond',serif;font-size:380px;font-weight:300;
+    color:rgba(184,169,138,0.04);line-height:1;pointer-events:none;z-index:0;user-select:none;}
+
+  /* HEADER */
+  .site-header{display:flex;align-items:center;justify-content:space-between;
+    padding:18px 40px;border-bottom:1px solid rgba(184,169,138,0.12);
+    position:relative;z-index:1;}
+  .logo{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;
+    color:var(--ww);letter-spacing:0.06em;text-decoration:none;}
+  .logo span{color:var(--gold);}
+  .header-tag{font-size:0.65rem;font-weight:300;letter-spacing:0.28em;
+    text-transform:uppercase;color:var(--gold);}
+
+  /* CONTAINER */
+  .container{position:relative;z-index:1;max-width:780px;margin:0 auto;padding:48px 24px 80px;}
+
+  /* SCREENS */
+  .screen{display:none;}
+  .screen.active{display:block;animation:fadeUp 0.45s ease forwards;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+  /* INTRO */
+  .intro-flag{display:inline-flex;align-items:center;gap:8px;background:rgba(184,169,138,0.1);
+    border:1px solid rgba(184,169,138,0.25);padding:6px 16px;margin-bottom:28px;margin-top:48px;}
+  .flag-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);}
+  .flag-text{font-size:0.65rem;font-weight:400;letter-spacing:0.28em;
+    text-transform:uppercase;color:var(--gold);}
+  .intro-title{font-family:'Cormorant Garamond',serif;
+    font-size:clamp(2.6rem,6vw,4rem);font-weight:300;line-height:1.05;
+    margin-bottom:12px;color:var(--ww);}
+  .intro-title em{font-style:italic;color:var(--gold);}
+  .intro-divider{width:56px;height:2px;background:var(--gold);margin:28px 0;}
+  .intro-desc{font-size:1.05rem;font-weight:300;line-height:1.85;
+    color:rgba(250,250,248,0.62);max-width:580px;margin-bottom:40px;}
+  .intro-meta{display:flex;gap:28px;margin-bottom:48px;flex-wrap:wrap;}
+  .meta-item{display:flex;align-items:center;gap:8px;}
+  .meta-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);}
+  .meta-text{font-size:0.82rem;font-weight:300;color:var(--mg);letter-spacing:0.04em;}
+
+  /* WHO IS THIS FOR */
+  .who-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:48px;}
+  .who-card{background:rgba(255,255,255,0.03);border:1px solid rgba(184,169,138,0.1);
+    padding:20px;text-align:center;}
+  .who-icon{font-size:1.4rem;margin-bottom:8px;}
+  .who-text{font-size:0.82rem;font-weight:300;color:rgba(250,250,248,0.6);line-height:1.5;}
+
+  /* EMAIL CAPTURE */
+  .email-section{background:rgba(184,169,138,0.06);border:1px solid rgba(184,169,138,0.18);
+    padding:28px;margin-bottom:32px;}
+  .email-label{font-size:0.65rem;font-weight:400;letter-spacing:0.28em;
+    text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+  .email-desc{font-size:0.9rem;font-weight:300;color:rgba(250,250,248,0.55);
+    margin-bottom:16px;line-height:1.6;}
+  .email-row{display:flex;gap:2px;}
+  .email-input{flex:1;padding:13px 16px;background:rgba(255,255,255,0.05);
+    border:1px solid rgba(184,169,138,0.2);color:var(--ww);
+    font-family:'Jost',sans-serif;font-size:0.9rem;font-weight:300;outline:none;
+    transition:border-color 0.2s;}
+  .email-input::placeholder{color:rgba(250,250,248,0.3);}
+  .email-input:focus{border-color:var(--gold);}
+  .email-skip{font-size:0.75rem;font-weight:300;color:rgba(250,250,248,0.3);
+    margin-top:10px;letter-spacing:0.04em;}
+  .email-skip a{color:rgba(184,169,138,0.5);cursor:pointer;text-decoration:none;}
+  .email-skip a:hover{color:var(--gold);}
+
+  .btn-start{display:inline-flex;align-items:center;gap:12px;background:var(--gold);
+    color:var(--dark);font-family:'Jost',sans-serif;font-size:0.75rem;font-weight:500;
+    letter-spacing:0.24em;text-transform:uppercase;padding:17px 48px;border:none;
+    cursor:pointer;transition:all 0.2s;}
+  .btn-start:hover{background:var(--ww);transform:translateY(-1px);}
+  .btn-arrow{font-size:1rem;transition:transform 0.2s;}
+  .btn-start:hover .btn-arrow{transform:translateX(4px);}
+
+  /* PROGRESS */
+  .progress-wrap{margin-bottom:44px;}
+  .progress-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+  .progress-label{font-size:0.65rem;font-weight:400;letter-spacing:0.28em;
+    text-transform:uppercase;color:var(--gold);}
+  .progress-count{font-size:0.75rem;font-weight:300;color:var(--mg);}
+  .progress-track{height:2px;background:rgba(184,169,138,0.12);border-radius:1px;overflow:hidden;}
+  .progress-fill{height:100%;background:var(--gold);transition:width 0.4s ease;border-radius:1px;}
+
+  /* CATEGORY FLAG */
+  .q-flag{display:inline-flex;align-items:center;gap:6px;margin-bottom:14px;}
+  .q-flag-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);}
+  .q-flag-text{font-size:0.6rem;font-weight:400;letter-spacing:0.28em;
+    text-transform:uppercase;color:rgba(184,169,138,0.65);}
+
+  /* QUESTION */
+  .q-text{font-family:'Cormorant Garamond',serif;
+    font-size:clamp(1.6rem,4vw,2.3rem);font-weight:300;line-height:1.15;
+    color:var(--ww);margin-bottom:10px;}
+  .q-context{font-size:0.88rem;font-weight:300;color:var(--mg);
+    line-height:1.65;margin-bottom:36px;font-style:italic;}
+
+  /* OPTIONS */
+  .options{display:flex;flex-direction:column;gap:8px;margin-bottom:40px;}
+  .option{display:flex;align-items:flex-start;gap:14px;padding:18px 20px;
+    background:rgba(255,255,255,0.03);border:1px solid rgba(184,169,138,0.1);
+    cursor:pointer;transition:all 0.2s;text-align:left;}
+  .option:hover{background:rgba(184,169,138,0.07);border-color:rgba(184,169,138,0.3);}
+  .option.selected{background:rgba(184,169,138,0.1);border-color:var(--gold);}
+  .option-radio{width:18px;height:18px;border:1.5px solid rgba(184,169,138,0.35);
+    border-radius:50%;flex-shrink:0;margin-top:2px;display:flex;align-items:center;
+    justify-content:center;transition:all 0.2s;}
+  .option.selected .option-radio{background:var(--gold);border-color:var(--gold);}
+  .option-dot{width:7px;height:7px;border-radius:50%;background:var(--dark);
+    opacity:0;transition:opacity 0.2s;}
+  .option.selected .option-dot{opacity:1;}
+  .option-label{font-size:0.975rem;font-weight:300;color:var(--ww);
+    line-height:1.4;margin-bottom:2px;}
+  .option-sub{font-size:0.78rem;font-weight:300;color:var(--mg);}
+
+  /* NAV */
+  .nav-btns{display:flex;justify-content:space-between;align-items:center;}
+  .btn-back{font-size:0.72rem;font-weight:300;letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--mg);background:none;border:none;cursor:pointer;padding:0;transition:color 0.2s;}
+  .btn-back:hover{color:var(--gold);}
+  .btn-next{background:var(--gold);color:var(--dark);font-family:'Jost',sans-serif;
+    font-size:0.72rem;font-weight:500;letter-spacing:0.24em;text-transform:uppercase;
+    padding:13px 34px;border:none;cursor:pointer;transition:all 0.2s;
+    opacity:0.35;pointer-events:none;}
+  .btn-next.ready{opacity:1;pointer-events:all;}
+  .btn-next.ready:hover{background:var(--ww);transform:translateY(-1px);}
+
+  /* RESULTS */
+  .results-top{margin-top:40px;margin-bottom:44px;}
+  .results-eyebrow{font-size:0.65rem;font-weight:400;letter-spacing:0.32em;
+    text-transform:uppercase;color:var(--gold);margin-bottom:14px;}
+  .risk-badge{font-family:'Cormorant Garamond',serif;
+    font-size:clamp(2.8rem,8vw,4.8rem);font-weight:300;line-height:1;margin-bottom:14px;display:block;}
+  .risk-LOW{color:var(--low);}
+  .risk-MEDIUM{color:var(--medium);}
+  .risk-HIGH{color:var(--high);}
+  .risk-CRITICAL{color:var(--critical);}
+  .results-sub{font-size:1.0rem;font-weight:300;color:rgba(250,250,248,0.6);
+    max-width:580px;line-height:1.8;margin-bottom:28px;}
+
+  /* SCORE BAR */
+  .score-bar-wrap{margin-bottom:44px;}
+  .score-bar-labels{display:flex;justify-content:space-between;
+    font-size:0.72rem;font-weight:300;color:var(--mg);margin-bottom:8px;letter-spacing:0.04em;}
+  .score-bar-track{height:5px;background:rgba(184,169,138,0.12);border-radius:3px;overflow:hidden;}
+  .score-bar-fill{height:100%;border-radius:3px;transition:width 1.4s ease;}
+
+  /* BREAKDOWN */
+  .breakdown{margin-bottom:44px;}
+  .breakdown-title{font-size:0.65rem;font-weight:400;letter-spacing:0.28em;
+    text-transform:uppercase;color:var(--gold);margin-bottom:18px;
+    padding-bottom:10px;border-bottom:1px solid rgba(184,169,138,0.2);}
+  .breakdown-sub{font-size:0.7rem;font-weight:500;letter-spacing:0.14em;
+    text-transform:uppercase;color:rgba(250,250,248,0.3);
+    margin-bottom:8px;margin-top:16px;}
+  .bd-item{display:flex;align-items:flex-start;gap:14px;padding:13px 0;
+    border-bottom:1px solid rgba(255,255,255,0.04);}
+  .bd-item:last-child{border-bottom:none;}
+  .bd-icon{font-size:1rem;flex-shrink:0;margin-top:2px;}
+  .bd-area{font-size:0.85rem;font-weight:500;color:var(--ww);
+    margin-bottom:2px;letter-spacing:0.02em;}
+  .bd-detail{font-size:0.82rem;font-weight:300;color:var(--mg);line-height:1.4;}
+
+  /* CTA CARDS */
+  .cta-cards{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-bottom:28px;}
+  .cta-card{padding:26px 22px;cursor:pointer;transition:all 0.2s;text-decoration:none;display:block;}
+  .cta-primary{background:var(--gold);}
+  .cta-primary:hover{background:var(--ww);}
+  .cta-secondary{background:rgba(255,255,255,0.04);border:1px solid rgba(184,169,138,0.18);}
+  .cta-secondary:hover{border-color:var(--gold);background:rgba(184,169,138,0.07);}
+  .cta-label{font-size:0.6rem;font-weight:400;letter-spacing:0.28em;
+    text-transform:uppercase;margin-bottom:8px;}
+  .cta-primary .cta-label{color:rgba(26,26,26,0.55);}
+  .cta-secondary .cta-label{color:var(--gold);}
+  .cta-title{font-family:'Cormorant Garamond',serif;font-size:1.25rem;
+    font-weight:400;line-height:1.2;margin-bottom:6px;}
+  .cta-primary .cta-title{color:var(--dark);}
+  .cta-secondary .cta-title{color:var(--ww);}
+  .cta-sub{font-size:0.78rem;font-weight:300;line-height:1.5;}
+  .cta-primary .cta-sub{color:rgba(26,26,26,0.5);}
+  .cta-secondary .cta-sub{color:var(--mg);}
+
+  .retake-btn{background:none;border:none;font-family:'Jost',sans-serif;
+    font-size:0.72rem;font-weight:300;letter-spacing:0.18em;text-transform:uppercase;
+    color:var(--mg);cursor:pointer;padding:12px 0;transition:color 0.2s;
+    display:block;text-align:center;width:100%;margin-top:12px;}
+  .retake-btn:hover{color:var(--gold);}
+
+  /* FOOTER */
+  .quiz-footer{text-align:center;padding:24px;border-top:1px solid rgba(184,169,138,0.08);
+    position:relative;z-index:1;}
+  .quiz-footer p{font-size:0.72rem;font-weight:300;
+    color:rgba(250,250,248,0.2);letter-spacing:0.04em;}
+  .quiz-footer a{color:var(--gold);text-decoration:none;}
+
+  @media(max-width:600px){
+    .site-header{padding:14px 20px;}
+    .container{padding:28px 18px 56px;}
+    .who-grid{grid-template-columns:1fr;}
+    .cta-cards{grid-template-columns:1fr;}
+    .email-row{flex-direction:column;}
+    .intro-meta{gap:14px;}
+  }
+
+.logo-link{display:flex;align-items:center;text-decoration:none;}
+.logo-img{height:44px;width:auto;display:block;}
+</style>
+</head>
+<body>
+
+<div class="bg-texture"></div>
+<div class="bg-watermark">GC</div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <a href="index.html" class="logo-link"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MDAgMTIwIj48cmVjdCB3aWR0aD0iNTAwIiBoZWlnaHQ9IjEyMCIgZmlsbD0iIzFhMWExYSIvPjxyZWN0IHg9IjIwIiB5PSIxMCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjgwIiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIuNSIvPjxyZWN0IHg9IjIwIiB5PSI0NCIgd2lkdGg9IjYyIiBoZWlnaHQ9IjE0IiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIuNSIvPjxyZWN0IHg9IjY2IiB5PSIxMCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjgwIiBmaWxsPSJub25lIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIuNSIvPjxwYXRoIGQ9Ik04MiAxMCBMMTE2IDEwIFExNDggMTAgMTQ4IDQyIFExNDggNzQgMTE2IDc0IEw4MiA3NCBaIiBmaWxsPSIjYjhhOThhIi8+PHBhdGggZD0iTTgyIDI0IEwxMTIgMjQgUTEzNCAyNCAxMzQgNDIgUTEzNCA2MCAxMTIgNjAgTDgyIDYwIFoiIGZpbGw9IiMxYTFhMWEiLz48cG9seWdvbiBwb2ludHM9Ijk4LDc0IDEyMCw3NCAxNDQsOTAgMTIyLDkwIiBmaWxsPSIjYjhhOThhIi8+PHJlY3QgeD0iNjYiIHk9IjEwIiB3aWR0aD0iMTYiIGhlaWdodD0iODAiIGZpbGw9IndoaXRlIi8+PHJlY3QgeD0iMTY1IiB5PSI0OCIgd2lkdGg9IjMyNSIgaGVpZ2h0PSIxIiBmaWxsPSIjYjhhOThhIiBvcGFjaXR5PSIwLjciLz48dGV4dCB4PSIxNjUiIHk9IjQ0IiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsIEFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjIyIiBmb250LXdlaWdodD0iMjAwIiBmaWxsPSJ3aGl0ZSIgbGV0dGVyLXNwYWNpbmc9IjgiPklOTk9WQVRPUlM8L3RleHQ+PHRleHQgeD0iMTY1IiB5PSI3MCIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLCBBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI5IiBmb250LXdlaWdodD0iMzAwIiBmaWxsPSJ3aGl0ZSIgbGV0dGVyLXNwYWNpbmc9IjMiIG9wYWNpdHk9IjAuNTUiPkJVSUxESU5HIEJFVFRFUiBXT1JLUExBQ0VTIFRPR0VUSEVSPC90ZXh0Pjwvc3ZnPg==" alt="HR Innovators" class="logo-img"></a>
+  <span class="header-tag">Government Contractor Assessment</span>
+</header>
+
+<div class="container">
+
+  <!-- INTRO SCREEN -->
+  <div id="screen-intro" class="screen active">
+
+    <div class="intro-flag">
+      <div class="flag-dot"></div>
+      <span class="flag-text">Free Assessment · Government Contractors</span>
+    </div>
+
+    <h1 class="intro-title">Is your team ready to<br>deliver on your<br><em>next contract win?</em></h1>
+
+    <div class="intro-divider"></div>
+
+    <p class="intro-desc">11 questions that reveal whether your people infrastructure is protecting your contracts or quietly putting them at risk. Built specifically for government contractors scaling after an award.</p>
+
+    <div class="intro-meta">
+      <div class="meta-item"><div class="meta-dot"></div><span class="meta-text">11 questions</span></div>
+      <div class="meta-item"><div class="meta-dot"></div><span class="meta-text">~4 minutes</span></div>
+      <div class="meta-item"><div class="meta-dot"></div><span class="meta-text">Instant results</span></div>
+      <div class="meta-item"><div class="meta-dot"></div><span class="meta-text">Built for gov contractors</span></div>
+    </div>
+
+    <div class="who-grid">
+      <div class="who-card">
+        <div class="who-icon">🏛️</div>
+        <div class="who-text">8(a) and small business contractors scaling after a contract win</div>
+      </div>
+      <div class="who-card">
+        <div class="who-icon">📈</div>
+        <div class="who-text">Contractors preparing for recompete or rapid hiring surge</div>
+      </div>
+      <div class="who-card">
+        <div class="who-icon">⚡</div>
+        <div class="who-text">CEOs who want to know if their team can deliver and scale</div>
+      </div>
+    </div>
+
+    <!-- EMAIL CAPTURE -->
+    <div class="email-section">
+      <div class="email-label">Get Your Results + Free Recommendations</div>
+      <p class="email-desc">Enter your email to receive your personalized results and a free HR readiness checklist for government contractors. No spam. Unsubscribe anytime.</p>
+      <div class="email-row">
+        <input type="email" class="email-input" id="email-input" placeholder="your@company.com"/>
+        <button class="btn-start" onclick="startQuiz()">
+          Start Assessment
+          <span class="btn-arrow">→</span>
+        </button>
+      </div>
+      <p class="email-skip">Prefer not to share your email? <a onclick="startQuizNoEmail()">Skip and take the quiz →</a></p>
+    </div>
+
+  </div>
+
+  <!-- QUIZ SCREEN -->
+  <div id="screen-quiz" class="screen">
+    <div class="progress-wrap">
+      <div class="progress-hdr">
+        <span class="progress-label">Assessment Progress</span>
+        <span class="progress-count" id="progress-count">1 of 11</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill" style="width:9%"></div>
+      </div>
+    </div>
+    <div id="question-area"></div>
+    <div class="nav-btns">
+      <button class="btn-back" id="btn-back" onclick="prevQ()">← Back</button>
+      <button class="btn-next" id="btn-next" onclick="nextQ()">Continue →</button>
+    </div>
+  </div>
+
+  <!-- RESULTS SCREEN -->
+  <div id="screen-results" class="screen">
+    <div class="results-top">
+      <p class="results-eyebrow">Your Contract Readiness Assessment Results</p>
+      <div class="risk-badge" id="risk-badge"></div>
+      <p class="results-sub" id="results-sub"></p>
+      <div class="score-bar-wrap">
+        <div class="score-bar-labels">
+          <span>People Infrastructure Risk</span>
+          <span id="score-pct"></span>
+        </div>
+        <div class="score-bar-track">
+          <div class="score-bar-fill" id="score-bar" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="breakdown">
+      <div class="breakdown-title">Your Personalized Breakdown</div>
+      <div id="breakdown-items"></div>
+    </div>
+
+    <div class="cta-cards">
+      <a href="https://calendly.com/jessica-hrinnovatorsconsulting/30min" target="_blank" class="cta-card cta-primary">
+        <div class="cta-label">Next Step</div>
+        <div class="cta-title">Schedule a Discovery Call</div>
+        <div class="cta-sub">45-60 minutes. No pitch. An honest conversation about your contracts and what HR support actually makes sense for your stage.</div>
+      </a>
+      <a href="toolkit.html" class="cta-card cta-secondary">
+        <div class="cta-label">Free Resources</div>
+        <div class="cta-title">Gov Contractor HR Toolkit</div>
+        <div class="cta-sub">Free checklists and guides built specifically for government contractors. Download and use today.</div>
+      </a>
+    </div>
+
+    <div id="resource-recs"></div>
+    <button class="retake-btn" onclick="retake()">← Retake the Assessment</button>
+  </div>
+
+</div>
+
+<footer class="quiz-footer">
+  <p>© 2025 HR Innovators · <a href="index.html">hrinnovatorsconsulting.com</a> · Jessica Langlais, PHR, sHRBP · 571-292-6188</p>
+</footer>
+
+<script>
+const questions = [
+  {
+    num: 1,
+    area: 'Key Person Risk',
+    icon: '🎯',
+    text: 'If your top performer walked out tomorrow, how would it affect your ability to deliver on your active contracts?',
+    context: 'Key person dependency is one of the most common and most overlooked risks in government contracting.',
+    options: [
+      { label: 'We have coverage no single person is a single point of failure', sub: 'Strong bench strength', score: 0 },
+      { label: 'It would hurt but we would recover', sub: 'Some dependency present', score: 1 },
+      { label: 'It would seriously disrupt delivery and the client would notice', sub: 'Real contract risk', score: 3 },
+      { label: 'It would put the contract at risk immediately', sub: 'Critical exposure', score: 4 },
+    ]
+  },
+  {
+    num: 2,
+    area: 'Hiring Speed & Surge Readiness',
+    icon: '🚀',
+    text: 'Your contracting officer just called. You need 8 people hired and on-site in 45 days. How confident are you?',
+    context: 'The 60 days after a contract award are the most HR-intensive and the most exposed period for most contractors.',
+    options: [
+      { label: 'Very confident we have a pipeline and a documented process', sub: 'Built to surge', score: 0 },
+      { label: 'Somewhat confident we have done it before but it is always stressful', sub: 'Process gaps present', score: 1 },
+      { label: 'Not very confident hiring takes us longer than that', sub: 'Delivery risk', score: 3 },
+      { label: 'We would struggle we do not have the infrastructure to move that fast', sub: 'Critical gap', score: 4 },
+    ]
+  },
+  {
+    num: 3,
+    area: 'Team Retention',
+    icon: '🔄',
+    text: 'How often do you lose team members mid-contract?',
+    context: 'Mid-contract turnover is one of the most damaging things that can happen to a client relationship and it is almost always preventable.',
+    options: [
+      { label: 'Rarely our retention is strong and people stay through the contract', sub: 'Strong retention', score: 0 },
+      { label: 'Occasionally it happens but we manage it', sub: 'Some risk', score: 1 },
+      { label: 'More than we would like it creates real delivery problems', sub: 'Retention issue', score: 3 },
+      { label: 'Frequently turnover is one of our biggest operational challenges', sub: 'Critical risk to contracts', score: 4 },
+    ]
+  },
+  {
+    num: 4,
+    area: 'Performance Management',
+    icon: '📊',
+    text: 'When a client raises a performance concern about one of your team members, what happens?',
+    context: 'How you respond to a performance concern directly affects whether your client renews or recompetes.',
+    options: [
+      { label: 'We have a clear process the manager addresses it quickly and documents everything', sub: 'Well managed', score: 0 },
+      { label: 'We handle it but it depends on the manager and is not always consistent', sub: 'Inconsistency risk', score: 1 },
+      { label: 'It usually escalates to me personally and takes too long to resolve', sub: 'Process gap', score: 3 },
+      { label: 'Honestly it is uncomfortable and we do not always handle it well', sub: 'Client relationship risk', score: 4 },
+    ]
+  },
+  {
+    num: 5,
+    area: 'Compensation & Talent Competitiveness',
+    icon: '💰',
+    text: 'How confident are you that your compensation is competitive enough to attract and retain the talent your contracts require?',
+    context: 'In government contracting, losing talent to a competitor often means losing the contract renewal too.',
+    options: [
+      { label: 'Very confident we benchmark regularly and stay competitive', sub: 'Strong positioning', score: 0 },
+      { label: 'Mostly confident but we have lost candidates or employees over pay', sub: 'Some exposure', score: 1 },
+      { label: 'Not very confident we know we are behind the market', sub: 'Retention risk', score: 3 },
+      { label: 'We are losing people to competitors who pay more', sub: 'Critical talent risk', score: 4 },
+    ]
+  },
+  {
+    num: 6,
+    area: 'Contract Surge & Back Office',
+    icon: '⚙️',
+    text: 'You just won a significant new contract. How ready is your back office to support rapid onboarding and hiring?',
+    context: 'Most compliance mistakes happen during the hiring surge. The companies that are ready before the win protect their contracts after it.',
+    options: [
+      { label: 'Fully ready we have systems, templates, and documented processes', sub: 'Contract ready', score: 0 },
+      { label: 'Mostly ready we have done it before but it is always chaotic', sub: 'Process gaps', score: 1 },
+      { label: 'Not ready every contract win creates an operational scramble', sub: 'Risk to delivery', score: 3 },
+      { label: 'We are not ready at all this is one of our biggest gaps', sub: 'Critical operational gap', score: 4 },
+    ]
+  },
+  {
+    num: 7,
+    area: 'Team Clarity & Performance Standards',
+    icon: '🎯',
+    text: 'Do your people know exactly what is expected of them and do you have a way to address it when they do not deliver?',
+    context: 'Unclear expectations and inconsistent accountability are the root cause of most mid-contract performance issues.',
+    options: [
+      { label: 'Yes expectations are clear and we have a consistent performance process', sub: 'Strong foundation', score: 0 },
+      { label: 'Mostly but it depends on the manager and is not always consistent', sub: 'Inconsistency risk', score: 1 },
+      { label: 'Not really performance conversations are avoided or handled informally', sub: 'Accountability gap', score: 3 },
+      { label: 'No we do not have a real performance management process', sub: 'High contract risk', score: 4 },
+    ]
+  },
+  {
+    num: 8,
+    area: 'Leadership Bandwidth',
+    icon: '⏱️',
+    text: 'How much of your time as a leader is spent dealing with people issues instead of winning new business?',
+    context: 'Every hour you spend on HR problems is an hour you are not spending on business development or client relationships.',
+    options: [
+      { label: 'Less than 10% HR runs smoothly without me', sub: 'Well optimized', score: 0 },
+      { label: '10-25% it is manageable but noticeable', sub: 'Some inefficiency', score: 1 },
+      { label: '25-40% people issues are a constant drain on my time', sub: 'Significant cost', score: 3 },
+      { label: 'More than 40% I spend more time on HR than on BD', sub: 'Critical bandwidth issue', score: 4 },
+    ]
+  },
+  {
+    num: 9,
+    area: 'Employee Situation Risk',
+    icon: '⚠️',
+    text: 'If a difficult employee situation escalated a complaint, a termination, a conflict how confident are you in how your organization would handle it?',
+    context: 'In government contracting, a mishandled employee situation can become a client situation very quickly.',
+    options: [
+      { label: 'Very confident we have a clear process and experienced managers', sub: 'Well protected', score: 0 },
+      { label: 'Mostly confident but it would depend on the situation', sub: 'Some uncertainty', score: 1 },
+      { label: 'Not very confident we have had situations that were handled poorly', sub: 'Real exposure', score: 3 },
+      { label: 'Not confident at all we do not have the infrastructure to handle this well', sub: 'High risk', score: 4 },
+    ]
+  },
+  {
+    num: 10,
+    area: 'Growth Readiness',
+    icon: '📈',
+    text: 'When you think about your next 12 months new contracts, growth, team expansion does your HR infrastructure give you confidence or concern?',
+    context: 'The companies that scale successfully in government contracting build their people infrastructure before they need it not after.',
+    options: [
+      { label: 'Confidence we are built to scale and win', sub: 'Ready to grow', score: 0 },
+      { label: 'Mostly confidence with some areas I know need work', sub: 'Minor gaps', score: 1 },
+      { label: 'More concern than confidence I know there are gaps', sub: 'Growth risk', score: 3 },
+      { label: 'Real concern HR is one of the things that keeps me up at night', sub: 'Immediate attention needed', score: 4 },
+    ]
+  },
+  {
+    num: 11,
+    area: 'Contract Loss Readiness',
+    icon: '🔻',
+    text: 'If you lost a contract tomorrow, do you have a process to handle what comes next for your team?',
+    context: 'Most contractors plan obsessively for the win. Almost none have a plan for the loss and the legal and operational exposure that comes with it.',
+    options: [
+      { label: 'Yes we have a documented offboarding and workforce transition process', sub: 'Well prepared', score: 0 },
+      { label: 'We have handled it before but nothing is formally documented', sub: 'Risk present', score: 1 },
+      { label: 'We would figure it out but it would be stressful and inconsistent', sub: 'Real exposure', score: 3 },
+      { label: 'No we have never thought through what that would look like', sub: 'Critical gap', score: 4 },
+    ]
+  },
+];
+
+const riskData = {
+  LOW: {
+    label: 'Contract Ready',
+    color: 'var(--low)',
+    barColor: '#4A7C59',
+    sub: 'Your people infrastructure is in solid shape. You have the foundation to scale, deliver, and protect your contracts. There may be areas to strengthen, but you are not in immediate danger.',
+  },
+  MEDIUM: {
+    label: 'Gaps Present',
+    color: 'var(--medium)',
+    barColor: '#B8960A',
+    sub: 'You have some infrastructure in place but there are meaningful gaps that create real risk especially during a contract award surge or recompete. These are fixable now and significantly cheaper to address proactively.',
+  },
+  HIGH: {
+    label: 'Contract Risk',
+    color: 'var(--high)',
+    barColor: '#C0602A',
+    sub: 'Your assessment reveals gaps that are creating real risk to your contract delivery, client relationships, and revenue. These are not theoretical risks they are the kinds of issues that affect contract performance and recompete outcomes.',
+  },
+  CRITICAL: {
+    label: 'Immediate Action Needed',
+    color: 'var(--critical)',
+    barColor: '#B85450',
+    sub: 'Your people infrastructure is not keeping pace with your contracts. The gaps identified here create significant risk to your ability to deliver, retain talent, and win new business. We strongly recommend a discovery call.',
+  },
+};
+
+let currentQ = 0;
+let answers = new Array(11).fill(null);
+let scores = new Array(11).fill(0);
+let userEmail = '';
+
+function startQuiz() {
+  userEmail = document.getElementById('email-input').value.trim();
+  showScreen('screen-quiz');
+  renderQ();
+}
+
+function startQuizNoEmail() {
+  userEmail = '';
+  showScreen('screen-quiz');
+  renderQ();
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderQ() {
+  const q = questions[currentQ];
+  const pct = ((currentQ + 1) / 11) * 100;
+
+  document.getElementById('progress-count').textContent = `${currentQ + 1} of 11`;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('btn-back').style.visibility = currentQ === 0 ? 'hidden' : 'visible';
+
+  const btn = document.getElementById('btn-next');
+  btn.textContent = currentQ === 10 ? 'See My Results →' : 'Continue →';
+  btn.classList.toggle('ready', answers[currentQ] !== null);
+
+  document.getElementById('question-area').innerHTML = `
+    <div class="q-flag">
+      <div class="q-flag-dot"></div>
+      <span class="q-flag-text">Question ${q.num} of 11 ${q.area}</span>
+    </div>
+    <h2 class="q-text">${q.text}</h2>
+    <p class="q-context">${q.context}</p>
+    <div class="options">
+      ${q.options.map((opt, i) => `
+        <div class="option ${answers[currentQ] === i ? 'selected' : ''}" onclick="selectOpt(${i})">
+          <div class="option-radio"><div class="option-dot"></div></div>
+          <div>
+            <div class="option-label">${opt.label}</div>
+            <div class="option-sub">${opt.sub}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function selectOpt(idx) {
+  answers[currentQ] = idx;
+  scores[currentQ] = questions[currentQ].options[idx].score;
+  document.querySelectorAll('.option').forEach((el, i) => el.classList.toggle('selected', i === idx));
+  document.getElementById('btn-next').classList.add('ready');
+}
+
+function nextQ() {
+  if (answers[currentQ] === null) return;
+  if (currentQ < 10) { currentQ++; renderQ(); window.scrollTo({top:0,behavior:'smooth'}); }
+  else showResults();
+}
+
+function prevQ() {
+  if (currentQ > 0) { currentQ--; renderQ(); window.scrollTo({top:0,behavior:'smooth'}); }
+}
+
+function showResults() {
+  const total = scores.reduce((a, b) => a + b, 0);
+  const maxScore = 44;
+  const pct = Math.round((total / maxScore) * 100);
+
+  let risk;
+  if (total <= 8) risk = 'LOW';
+  else if (total <= 18) risk = 'MEDIUM';
+  else if (total <= 30) risk = 'HIGH';
+  else risk = 'CRITICAL';
+
+  const rd = riskData[risk];
+  showScreen('screen-results');
+
+  const badge = document.getElementById('risk-badge');
+  badge.textContent = rd.label;
+  badge.className = `risk-badge risk-${risk}`;
+
+  document.getElementById('results-sub').textContent = rd.sub;
+  document.getElementById('score-pct').textContent = `${pct}% risk exposure`;
+
+  const bar = document.getElementById('score-bar');
+  bar.style.background = rd.barColor;
+  setTimeout(() => { bar.style.width = pct + '%'; }, 120);
+
+  // Breakdown
+  const sorted = questions.map((q, i) => ({...q, score: scores[i], answerIdx: answers[i]}))
+    .sort((a, b) => b.score - a.score);
+
+  const issues = sorted.filter(q => q.score >= 2);
+  const good = sorted.filter(q => q.score === 0);
+
+  let html = '';
+  if (issues.length > 0) {
+    html += `<div class="breakdown-sub">Areas Creating Contract Risk</div>`;
+    issues.slice(0, 5).forEach(q => {
+      const icon = q.score === 4 ? '🔴' : q.score === 3 ? '🟠' : '🟡';
+      const ans = q.options[q.answerIdx];
+      html += `<div class="bd-item">
+        <div class="bd-icon">${icon}</div>
+        <div>
+          <div class="bd-area">${q.area}</div>
+          <div class="bd-detail">${ans.sub} ${ans.label.toLowerCase()}</div>
+        </div>
+      </div>`;
+    });
+  }
+  if (good.length > 0) {
+    html += `<div class="breakdown-sub">What Is Working Well</div>`;
+    good.slice(0, 3).forEach(q => {
+      html += `<div class="bd-item">
+        <div class="bd-icon">✅</div>
+        <div>
+          <div class="bd-area">${q.area}</div>
+          <div class="bd-detail">In good shape keep it maintained and documented</div>
+        </div>
+      </div>`;
+    });
+  }
+
+  document.getElementById('breakdown-items').innerHTML = html;
+
+  // Resource recs
+  document.getElementById('resource-recs').innerHTML = `
+    <div style="font-size:0.65rem;font-weight:400;letter-spacing:0.28em;text-transform:uppercase;
+      color:var(--gold);margin-bottom:10px;padding-top:20px;border-top:1px solid rgba(184,169,138,0.12);">
+      Recommended Free Resources
+    </div>
+    <a href="toolkit.html" style="display:block;padding:13px 18px;background:rgba(255,255,255,0.03);
+      border:1px solid rgba(184,169,138,0.14);font-size:0.85rem;font-weight:300;color:var(--gold);
+      text-decoration:none;transition:all 0.2s;margin-bottom:6px;letter-spacing:0.04em;"
+      onmouseover="this.style.background='rgba(184,169,138,0.08)'"
+      onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+      → HR Compliance Checklist for Government Contractors
+    </a>
+    <a href="toolkit.html" style="display:block;padding:13px 18px;background:rgba(255,255,255,0.03);
+      border:1px solid rgba(184,169,138,0.14);font-size:0.85rem;font-weight:300;color:var(--gold);
+      text-decoration:none;transition:all 0.2s;margin-bottom:6px;letter-spacing:0.04em;"
+      onmouseover="this.style.background='rgba(184,169,138,0.08)'"
+      onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+      → The 5 HR Documents Every Growing Company Needs
+    </a>
+    <a href="HR_Innovators_Quiz.html" style="display:block;padding:13px 18px;background:rgba(255,255,255,0.03);
+      border:1px solid rgba(184,169,138,0.14);font-size:0.85rem;font-weight:300;color:var(--gold);
+      text-decoration:none;transition:all 0.2s;letter-spacing:0.04em;"
+      onmouseover="this.style.background='rgba(184,169,138,0.08)'"
+      onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+      → Take the General HR Health Check
+    </a>
+  `;
+}
+
+function retake() {
+  currentQ = 0;
+  answers = new Array(11).fill(null);
+  scores = new Array(11).fill(0);
+  showScreen('screen-intro');
+}
+</script>
+</body>
+</html>
